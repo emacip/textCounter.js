@@ -1,6 +1,7 @@
 /*
 	Name: jquery.textCounter.js
 	Author: Andy Matthews
+  Modified: Lesson Planet http://www.lessonplanet.com/
 	Website: http://www.andyMatthews.net
 	Packed With: http://jsutility.pjoneil.net/
 */
@@ -16,7 +17,11 @@
 
 			$e.html(o.count);
 			$(o.target).keyup(function(){
-				var cnt = this.value.length;
+        // target is a tinyMCE editor
+        // Get the text and remove html tags
+        var targetText = (this.hasOwnProperty('editorId')) ? $(this.getBody()).text().replace(/(<([^>]+)>)/ig,'') : this.value;
+
+				var cnt = targetText.length;
 
 				if (cnt <= (o.count-o.alertAt)) {
 					// clear skies
@@ -27,14 +32,14 @@
 				} else {
 					// over limit
 					$e.removeClass('tcAlert tcWarn').addClass('tcWarn');
-					if (o.stopAtLimit) this.value = this.value.substring(0, o.count);
+					if (o.stopAtLimit) targetText = targetText.substring(0, o.count);
 				}
-				$e.html(o.count-this.value.length);
+				$e.html(o.count-targetText.length);
 			}).trigger('keyup');
 
 		});
 		
-	}
+	};
 
 	$.fn.textCounter.defaults = {
 		count: 140,
